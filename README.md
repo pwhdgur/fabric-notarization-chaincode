@@ -530,20 +530,20 @@ main();
 - 채널 이름 : mychannel
 
 5.1 프로젝트 디렉토리 생성
-# inside fabric-samples
+// inside fabric-samples
 $ mkdir docrec && cd docrec
 
 5.2 필요한 패키지로드
 - Fabric SDK 외에도 X509 인증서 및 암호화 처리가 필요
 
-# inside fabric-samples/docrec
+// inside fabric-samples/docrec
 $ npm init -y
 $ npm install fabric-ca-client fabric-network crypto-js jsrsasign -S
 
 5.3 체인 코드
 - 데모 목적으로 체인 코드를 fabric-samples / chaincode 디렉토리에 배치합니다. 이 디렉토리는 기본 네트워크의 실행중인 컨테이너에서 액세스 할 수 있습니다.(셋업 파일내용 참조)
 
-# inside fabric-samples/chaincode
+// inside fabric-samples/chaincode
 $ mkdir docrec && cd docrec
 $ <put the docrec.go file here>
 
@@ -551,39 +551,39 @@ $ <put the docrec.go file here>
 - 총 4 개의 클라이언트 응용 프로그램
 - fabric-samples / docrec 디렉토리에 생성 (에디터로 작성필요)
 
-# inside fabric-samples/docrec
+// inside fabric-samples/docrec
 $ <put the four files enrollAdmin.js, registerUser.js, addDocByFile.js and validateDocByFile.js>
 
 5.5 기본 네트워크 시작
 - 5 개의 컨테이너가 모두 실행 중인지 확인
 - mychannel 생성되고 피어 노드가 채널에 참여하는지 확인
 
-# inside fabric-samples/basic-network
+// inside fabric-samples/basic-network
 $ ./start.sh && docker-compose -f docker-compose.yml up -d cli
 $ docker ps -a
 
 5.6 docrec 체인 코드 설치 및 인스턴스화
 - 기본 네트워크가 시작된 후 체인 코드 설치 및 인스턴스화 작업을 수행함.
 
-# any directory
+// any directory
 $ docker exec cli peer chaincode install -n docrec -v 1.0 -p "github.com/docrec"
 $ docker exec cli peer chaincode instantiate -o orderer.example.com:7050 -C mychannel -n docrec -v 1.0 -c '{"Args":[]}' -P "OR ('Org1MSP.member')"
 
 5.7 관리자로 등록
-# inside fabric-samples/docrec
+// inside fabric-samples/docrec
 $ node enrollAdmin.js
 $ ls wallet
 
 5.8 사용자 alice 및 bob을 등록
-# inside fabric-samples/docrec
+// inside fabric-samples/docrec
 $ node registerUser.js alice
 $ node registerUser.js bob
 $ ls wallet
 
 5.9 Extract Certificate from alice and bob
-- 편집기를 사용해서 alicecert 및 bobcert의 두 파일로 보관
+- 편집기를 사용해서 alicecert 및 bobcert의 두 파일로 보관 (편집기에서 참조사이트의 그림 형태로 수정필요)
 
-# inside fabric-samples/docrec
+// inside fabric-samples/docrec
 $ cat wallet/alice/alice
 $ cat wallet/bob/bob
 
@@ -593,7 +593,7 @@ $ echo "This is a test file for alice" > alicefile
 $ echo "This is another test file for bob" > bobfile
 
 5.11 공증 응용 프로그램에서 파일 추가
-# inside fabric-sample/docrec
+// inside fabric-sample/docrec
 $ node addDocByFile.js alice alicefile
 $ node addDocByFile.js bob bobfile
 
@@ -602,18 +602,18 @@ $ node addDocByFile.js bob bobfile
 - validate alicefile with alicecert
 - validate bobfile with bobcert
 
-# positive result (true)
-# inside fabric-sample/docrec
+// positive result (true)
+// inside fabric-sample/docrec
 $ node validateDocByFile.js alice alicefile alicecert
 $ node validateDocByFile.js alice bobfile bobcert
 
-# negative result. (false)
-# inside fabric-sample/docrec
+// negative result. (false)
+// inside fabric-sample/docrec
 $ node validateDocByFile.js alice alicefile bobcert
 $ node validateDocByFile.js alice bobfile alicecert
 
 - 이전에 제출되지 않은 파일의 유효성을 검사 결과
-# inside fabric-sample/docrec
+// inside fabric-sample/docrec
 $ echo "File not recorded" > nofile
 $ node validateDocByFile.js alice nofile alicecert
 
